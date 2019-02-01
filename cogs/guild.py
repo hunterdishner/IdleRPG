@@ -721,7 +721,7 @@ class Guild:
                 )
 
         await ctx.send(
-            f"{ctx.author.mention} seeks a guild adventure for **{guild['name']}**! Write `guild adventure join` to join them! Unlimited players can join in the next 30 seconds. The minimum of players required is 3."
+            f"{ctx.author.mention} seeks a guild adventure for **{guild['name']}**! Write `guild adventure join` to join them! Unlimited players can join in the next 5 minutes. The minimum of players required is 3."
         )
 
         joined = [ctx.author]
@@ -747,7 +747,7 @@ class Guild:
 
         while not started:
             try:
-                msg = await self.bot.wait_for("message", check=apply, timeout=30)
+                msg = await self.bot.wait_for("message", check=apply, timeout=300)
                 test = await is_in_guild(msg.author.id, difficulty)
                 if test:
                     difficulty = test
@@ -759,6 +759,7 @@ class Guild:
                     await ctx.send("You aren't in their guild.")
             except:
                 if len(joined) < 3:
+                    async self.bot.reset_cooldown(ctx)
                     return await ctx.send(
                         "You didn't get enough other players for the guild adventure."
                     )
